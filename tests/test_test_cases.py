@@ -11,7 +11,6 @@ from utils.data_generator import (
 
 
 def _register_new_account(home_page, signup_login_page, signup_page, account_created_page):
-    """Shared registration flow used by several test cases."""
     name = random_name()
     email = random_email()
     account_data = random_account_data()
@@ -96,7 +95,7 @@ class TestAccountManagement:
         _delete_account(home_page, account_deleted_page)
 
     @allure.story("Test Case 3: Login User with incorrect email and password")
-    @pytest.mark.parametrize("email,password", [(random_email(), random_password())])
+    @pytest.mark.parametrize("email,password", [("wrongemail@test.com", "wrongpass")])
     def test_case_03_login_incorrect_credentials(self, home_page, signup_login_page, email, password):
         with home_page.step("Navigate to home page"):
             home_page.open()
