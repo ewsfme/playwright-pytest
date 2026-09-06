@@ -16,11 +16,23 @@ def browser_context_args(browser_context_args):
     return {
         **browser_context_args,
         "viewport": {"width": 1440, "height": 900},
-        "user_agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"
-        ),
         "locale": "en-US",
     }
+
+
+@pytest.fixture(autouse=True)
+def bypass_bot_detection(page, browser_name):
+    page.add_init_script("""
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined
+        });
+    """)
+
+    if browser_name == "firefox":
+        page.set_extra_http_headers({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
+            "Accept-Language": "en-US,en;q=0.5",
+        })
 
 
 @pytest.fixture(autouse=True)
