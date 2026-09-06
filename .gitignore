@@ -1,0 +1,6 @@
+pages/__pycache__/
+pages/__init__.py
+.pytest_cache/
+.venv/
+test-results/
+allure-results/
