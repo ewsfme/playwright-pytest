@@ -4,3 +4,4 @@ pages/__init__.py
 .venv/
 test-results/
 allure-results/
+allure-report/

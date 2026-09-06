@@ -1,10 +1,3 @@
-"""Generates randomized, unique test data using Faker.
-
-Using randomly generated values (rather than hardcoded ones) keeps the
-suite runnable multiple times against the same live site without
-"email already exists" collisions, and satisfies the requirement to
-use randomized input data.
-"""
 import random
 import string
 

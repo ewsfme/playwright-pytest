@@ -1,23 +1,3 @@
-"""Posts a test-run summary to Slack via an Incoming Webhook.
-
-Called from the GitHub Actions pipeline after the Allure report has
-been generated and deployed to GitHub Pages. It reads the pytest exit
-status and the Allure summary counters, then sends one message with:
-  - overall status (PASSED / FAILED)
-  - pass/fail/skip counters
-  - a link to the published GitHub Pages report
-
-Required environment variables:
-  SLACK_WEBHOOK_URL   - Slack Incoming Webhook URL (repo secret)
-  REPORT_URL          - public GitHub Pages URL of the Allure report
-  RUN_STATUS          - "success" or "failure" (from the job's outcome)
-  GITHUB_REPOSITORY   - "owner/repo" (provided automatically by CI)
-  GITHUB_RUN_ID        - CI run id (provided automatically by CI)
-
-Optional:
-  ALLURE_SUMMARY_PATH - path to allure-report/widgets/summary.json
-                         (used to include pass/fail counts)
-"""
 import json
 import os
 import sys
