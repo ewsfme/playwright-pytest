@@ -1,16 +1,3 @@
-"""Shared fixtures.
-
-Browser choice and parallelism are NOT hardcoded here: they come from
-the CLI, via pytest-playwright's built-in `--browser` option and
-pytest-xdist's `-n` option, e.g.:
-
-    pytest --browser chromium -n 4
-    pytest --browser firefox -n 2
-    pytest --browser webkit
-
-This file wires page objects and attaches a screenshot + the browser
-name to Allure automatically, including on failure.
-"""
 import allure
 import pytest
 
@@ -32,9 +19,6 @@ def browser_context_args(browser_context_args):
 
 @pytest.fixture(autouse=True)
 def _block_ad_requests(context):
-    """Abort requests to ad/consent domains for every test so the Google
-    Ads banner and consent popup never render and block clicks.
-    """
     block_ads(context)
     yield
 
@@ -89,8 +73,9 @@ def pytest_runtest_makereport(item, call):
 
     if report.when == "call":
         page_fixture = item.funcargs.get("page")
-        browser_name = item.config.getoption("--browser") or "chromium"
-        allure.dynamic.tag(browser_name)
+        browser_option = item.config.getoption("--browser")
+        browser_name = browser_option[0] if isinstance(browser_option, list) and browser_option else (browser_option or "chromium")
+        allure.dynamic.tag(str(browser_name))
 
         if page_fixture is not None:
             try:
