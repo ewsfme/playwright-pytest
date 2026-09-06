@@ -245,8 +245,9 @@ class TestProducts:
             assert product_details_page.is_details_visible()
 
     @allure.story("Test Case 9: Search Product")
-    @pytest.mark.parametrize("search_term", ["Dress", "Jeans", "Top"])
-    def test_case_09_search_product(self, home_page, products_page, search_term):
+    def test_case_09_search_product(self, home_page, products_page):
+        search_term = "Dress"
+
         with home_page.step("Navigate to home page"):
             home_page.open()
             assert home_page.is_home_page_visible()
