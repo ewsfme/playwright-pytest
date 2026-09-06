@@ -13,8 +13,14 @@ from utils.popups import block_ads
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
-    # Runs in a clean context per test; keep viewport consistent across browsers.
-    return {**browser_context_args, "viewport": {"width": 1440, "height": 900}}
+    return {
+        **browser_context_args,
+        "viewport": {"width": 1440, "height": 900},
+        "user_agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"
+        ),
+        "locale": "en-US",
+    }
 
 
 @pytest.fixture(autouse=True)

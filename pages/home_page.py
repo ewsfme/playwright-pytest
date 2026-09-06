@@ -19,11 +19,7 @@ class HomePage(BasePage):
         self.goto("/")
 
     def is_home_page_visible(self) -> bool:
-    try:
-        self.page.locator("header#header").wait_for(state="visible", timeout=15000)
-        return True
-    except Exception:
-        return False
+        return self.is_visible(self.page.locator(self.LOGO))
 
     def open_signup_login(self):
         self.click(self.page.locator(self.NAV_SIGNUP_LOGIN))
