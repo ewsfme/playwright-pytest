@@ -5,3 +5,5 @@ pages/__init__.py
 test-results/
 allure-results/
 allure-report/
+__pycache__/
+*.pyc
