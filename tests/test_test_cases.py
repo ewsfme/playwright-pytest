@@ -1,12 +1,3 @@
-"""Automates Test Cases 1-10 listed on
-https://www.automationexercise.com/test_cases
-
-Each test:
-  * uses the Page Object Model (pages/*.py) — no locators live in this file
-  * uses randomized data from utils/data_generator.py
-  * is broken into Allure steps with a screenshot per step
-  * contains at least one explicit `assert`
-"""
 import allure
 import pytest
 
@@ -86,10 +77,12 @@ class TestAccountManagement:
             assert home_page.is_home_page_visible()
 
         email, password = _register_new_account(home_page, signup_login_page, signup_page, account_created_page)
-        _delete_account(home_page, account_deleted_page)
 
-        with home_page.step("Click on 'Signup / Login' button"):
-            home_page.open_signup_login()
+        with home_page.step("Verify that 'Logged in as username' is visible after registration"):
+            assert home_page.is_logged_in_as_visible()
+
+        with home_page.step("Click 'Logout' button"):
+            home_page.logout()
 
         with signup_login_page.step("Verify 'Login to your account' is visible"):
             assert signup_login_page.is_login_heading_visible()
@@ -103,7 +96,7 @@ class TestAccountManagement:
         _delete_account(home_page, account_deleted_page)
 
     @allure.story("Test Case 3: Login User with incorrect email and password")
-    @pytest.mark.parametrize("email,password", [("wrongemail@mail.com", "wrongpass")])
+    @pytest.mark.parametrize("email,password", [(random_email(), random_password())])
     def test_case_03_login_incorrect_credentials(self, home_page, signup_login_page, email, password):
         with home_page.step("Navigate to home page"):
             home_page.open()
@@ -157,11 +150,10 @@ class TestAccountManagement:
             home_page.open()
             assert home_page.is_home_page_visible()
 
-        email, _ = _register_new_account(home_page, signup_login_page, signup_page, account_created_page)
-        _delete_account(home_page, account_deleted_page)
+        email, password = _register_new_account(home_page, signup_login_page, signup_page, account_created_page)
 
-        with home_page.step("Click on 'Signup / Login' button"):
-            home_page.open_signup_login()
+        with home_page.step("Log out so the email can be re-entered as a guest"):
+            home_page.logout()
 
         with signup_login_page.step("Verify 'New User Signup!' is visible"):
             assert signup_login_page.is_new_user_heading_visible()
@@ -171,6 +163,18 @@ class TestAccountManagement:
 
         with signup_login_page.step("Verify error 'Email Address already exist!' is visible"):
             assert signup_login_page.is_signup_error_visible()
+
+        with home_page.step("Navigate to home page and log back in to clean up the account"):
+            home_page.open()
+            home_page.open_signup_login()
+
+        with signup_login_page.step("Log in with the original email and password"):
+            signup_login_page.login(email, password)
+
+        with home_page.step("Verify that 'Logged in as username' is visible"):
+            assert home_page.is_logged_in_as_visible()
+
+        _delete_account(home_page, account_deleted_page)
 
 
 @allure.feature("Site navigation")
